@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   title: "Multi-Agent Dev Team | Orquestador, Develop & Testing",
   description:
     "Equipo autónomo de 3 agentes de IA colaborativos en bucle cerrado con Next.js 15, PostgreSQL y Vercel.",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
