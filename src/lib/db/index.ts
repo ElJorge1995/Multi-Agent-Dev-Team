@@ -301,7 +301,7 @@ export async function getProject(projectId: string): Promise<IProject | null> {
           status: proj.status as IProject["status"],
           createdAt: proj.createdAt.toISOString(),
           updatedAt: proj.updatedAt.toISOString(),
-          tasks: proj.tasks.map((t) => ({
+          tasks: proj.tasks.map((t: { id: string; projectId: string; title: string; description: string; order: number; assignedTo: string; status: string; iterations: number; createdAt: Date; updatedAt: Date }) => ({
             id: t.id,
             projectId: t.projectId,
             title: t.title,
@@ -313,7 +313,7 @@ export async function getProject(projectId: string): Promise<IProject | null> {
             createdAt: t.createdAt.toISOString(),
             updatedAt: t.updatedAt.toISOString(),
           })),
-          logs: proj.logs.map((l) => ({
+          logs: proj.logs.map((l: { id: string; projectId: string; agent: string; type: string; content: string; meta: string | null; createdAt: Date }) => ({
             id: l.id,
             projectId: l.projectId,
             agent: l.agent as IAgentLog["agent"],
@@ -322,7 +322,7 @@ export async function getProject(projectId: string): Promise<IProject | null> {
             meta: l.meta ? JSON.parse(l.meta) : null,
             createdAt: l.createdAt.toISOString(),
           })),
-          artifacts: proj.artifacts.map((a) => ({
+          artifacts: proj.artifacts.map((a: { id: string; projectId: string; taskId: string | null; fileName: string; content: string; language: string; version: number; createdAt: Date }) => ({
             id: a.id,
             projectId: a.projectId,
             taskId: a.taskId || undefined,
@@ -359,14 +359,14 @@ export async function listRecentProjects(): Promise<IProject[]> {
           tasks: true,
         },
       });
-      return projects.map((p) => ({
+      return projects.map((p: { id: string; title: string; prompt: string; status: string; createdAt: Date; updatedAt: Date; tasks: Array<{ id: string; projectId: string; title: string; description: string; order: number; assignedTo: string; status: string; iterations: number }> }) => ({
         id: p.id,
         title: p.title,
         prompt: p.prompt,
         status: p.status as IProject["status"],
         createdAt: p.createdAt.toISOString(),
         updatedAt: p.updatedAt.toISOString(),
-        tasks: p.tasks.map((t) => ({
+        tasks: p.tasks.map((t: { id: string; projectId: string; title: string; description: string; order: number; assignedTo: string; status: string; iterations: number }) => ({
           id: t.id,
           projectId: t.projectId,
           title: t.title,
