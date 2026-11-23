@@ -94,7 +94,7 @@ export function ExplanationModal({ isOpen, onClose }: ExplanationModalProps) {
                     <span>2. Develop</span>
                   </div>
                   <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
-                    Construye la solución técnica en Next.js 15, TypeScript y Tailwind. Genera artefactos de código y atiende las órdenes de corrección de Testing.
+                    Construye la solución técnica en Next.js 16, TypeScript y Tailwind. Genera artefactos de código y atiende las órdenes de corrección de Testing.
                   </p>
                 </div>
 
@@ -117,7 +117,7 @@ export function ExplanationModal({ isOpen, onClose }: ExplanationModalProps) {
                 </p>
                 <ol className="list-decimal pl-5 space-y-1 text-zinc-600 dark:text-zinc-400">
                   <li>Develop genera la primera versión de un componente o endpoint.</li>
-                  <li>Testing ejecuta casos de prueba (ej: validación de campos, doble submit en botones, control de errores).</li>
+                  <li>Testing ejecuta casos de prueba (ej: validación de inputs, estados de carga, prevención de doble click).</li>
                   <li>Al detectar un fallo, Testing marca la tarea en <span className="font-semibold text-amber-600">RETRYING</span> y le envía a Develop el stack trace y la sugerencia de corrección.</li>
                   <li>Develop lee el feedback, parchea el fichero y genera una versión v2.0.</li>
                   <li>Testing re-evalúa y, al comprobar que los fallos fueron resueltos, aprueba la tarea (<span className="font-semibold text-emerald-600">PASSED</span>) para avanzar a la siguiente.</li>
@@ -140,10 +140,10 @@ export function ExplanationModal({ isOpen, onClose }: ExplanationModalProps) {
               <div className="space-y-3">
                 <div className="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60">
                   <h4 className="font-semibold text-indigo-600 dark:text-indigo-400 mb-1">
-                    1. Arquitectura & Modelado de Datos
+                    1. Scaffolding y Modelado Relacional
                   </h4>
                   <p className="text-zinc-600 dark:text-zinc-400">
-                    Se utilizó el asistente en terminal para estructurar el esquema relacional en Prisma (<code className="px-1 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800">Project</code>, <code className="px-1 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800">Task</code>, <code className="px-1 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800">AgentLog</code>, <code className="px-1 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800">Artifact</code>) asegurando compatibilidad con bases de datos serverless como Neon o Supabase.
+                    Se utilizó el asistente en terminal para estructurar el esquema relacional en Prisma (<code className="px-1 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800">Project</code>, <code className="px-1 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800">Task</code>, <code className="px-1 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800">AgentLog</code>, <code className="px-1 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800">Artifact</code>) asegurando compatibilidad con bases de datos PostgreSQL serverless como Neon o Supabase.
                   </p>
                 </div>
 
@@ -175,7 +175,7 @@ export function ExplanationModal({ isOpen, onClose }: ExplanationModalProps) {
                   Respuestas a las 4 Preguntas de la Entrevista
                 </h3>
                 <p className="text-zinc-500 dark:text-zinc-400">
-                  Estas son las respuestas preparadas para entregar en el formulario de la candidatura:
+                  Basadas en experiencia real en proyectos de producción (EFL Fight League y Plataforma Multi-Red Social):
                 </p>
               </div>
 
@@ -185,11 +185,23 @@ export function ExplanationModal({ isOpen, onClose }: ExplanationModalProps) {
                   1. ¿Qué integraciones con servicios externos has hecho (pagos, CRM, WhatsApp, Google...)? Cuéntanos una que te costara y cómo la resolviste.
                 </span>
                 <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed pt-1">
-                  He integrado pasarelas de pago (Stripe Checkout y suscripciones recurrentes), autenticación federada con Google OAuth2, APIs de mensajería (WhatsApp Cloud API / Twilio) y sincronización con CRMs como HubSpot.
+                  He trabajado con una amplia variedad de integraciones en proyectos reales en producción:
+                  <br />
+                  • <strong>Pagos y logística (en EFL - Elite Fight League):</strong> Integración de Stripe (PaymentIntent embebido, checkout y webhooks asíncronos con firma criptográfica e idempotencia) y la API de Packlink PRO para cálculo de envíos en tiempo real y generación de borradores de etiquetas vía Vercel Crons.
+                  <br />
+                  • <strong>Redes Sociales y OAuth (en BotRedesSociales):</strong> Meta Graph API (Facebook e Instagram Login directo con tokens de 60 días), TikTok Content Posting API, YouTube Data API v3 (Google Cloud), Twitter/X API (Pay-Per-Use) y automatizaciones conectadas con n8n.
+                  <br />
+                  • <strong>Bases de Datos y Email:</strong> Supabase (Postgres, Auth y Storage con RLS) y nodemailer SMTP para envíos transaccionales.
                   <br /><br />
-                  <strong>El reto más complejo:</strong> La gestión de <em>webhooks asíncronos en Stripe</em> bajo concurrencia y caídas de red. El desafío principal era evitar el doble cobro o doble activación de cuentas ante reintentos automáticos de Stripe (at-least-once delivery).
+                  <strong>La que más me costó:</strong> La <strong>API de TikTok (Content Posting API - Direct Post)</strong>. Requirió superar **3 rechazos de auditoría** antes de conseguir la aprobación para publicar en producción:
+                  <br />
+                  1. <em>Rechazo por modelo de negocio:</em> TikTok rechaza apps de uso interno/personal; tuve que reestructurar la plataforma para certificarla como multi-cliente (los clientes conectan sus propias cuentas vía OAuth).
+                  <br />
+                  2. <em>Rechazo por coherencia de marca:</em> Exigieron coherencia total (nombre de app = título de pestaña = dominio verificado = favicon) y páginas públicas de Términos y Privacidad sin requerir login.
+                  <br />
+                  3. <em>Vídeo demo y Direct Post:</em> Exigían un vídeo demostrativo continuo con la barra de navegación visible mostrando la publicación efectiva en TikTok. Además, la auditoría de <em>Direct Post</em> requería verificación de dominio previa para <code>PULL_FROM_URL</code> en fotos y carga binaria <code>FILE_UPLOAD</code> para vídeos.
                   <br /><br />
-                  <strong>Cómo lo resolví:</strong> Implementé un patrón de <strong>idempotencia estricta</strong> en la base de datos guardando el <code className="px-1 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800">event.id</code> dentro de una transacción con clave única. Si el evento ya figuraba como procesado, devolvía <code className="px-1 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800">200 OK</code> inmediatamente. Además, validé la firma criptográfica del header (<code className="px-1 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800">stripe-signature</code>) usando el buffer crudo del request para prevenir ataques de replay.
+                  Resolví cada requerimiento punto por punto hasta lograr la certificación completa en vivo.
                 </p>
               </div>
 
@@ -199,10 +211,9 @@ export function ExplanationModal({ isOpen, onClose }: ExplanationModalProps) {
                   2. ¿Has publicado apps en App Store o Google Play? ¿Cuáles y qué parte hiciste tú?
                 </span>
                 <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed pt-1">
-                  Sí, he trabajado en el ciclo completo de desarrollo y despliegue móvil utilizando <strong>React Native y Expo (EAS Build / Submit)</strong>.
+                  Mi trayectoria principal está enfocada en el desarrollo <strong>Full-Stack Web (Next.js, Laravel, Supabase, PostgreSQL) y aplicaciones web progresivas (PWAs)</strong> responsivas de alto rendimiento optimizadas para dispositivos móviles.
                   <br /><br />
-                  <strong>Mi rol y responsabilidades:</strong>
-                  Me encargué de la arquitectura frontend, la integración con las APIs REST/GraphQL del backend, el almacenamiento seguro local (SecureStore para tokens JWT), y la configuración de notificaciones push (Expo Push Notifications / FCM). En el proceso de publicación, gestioné los certificados y perfiles de aprovisionamiento en Apple Developer Center, la consola de Google Play Console (subida de AABs, configuración de fichas de la tienda y resolución de requerimientos de privacidad de datos y permisos del manifiesto).
+                  Aunque no he publicado apps móviles nativas individuales directamente en App Store o Google Play, domino con solvencia los estándares de seguridad, privacidad y verificación de permisos que exigen las grandes plataformas (como demuestran las auditorías aprobadas en Meta App Review y TikTok Direct Post, cuyos criterios de revisión, gestión de scopes OAuth y políticas de datos son idénticos a los de Google Play Console y App Store Connect). Además, cuento con base en React y TypeScript que me permite adaptarme de inmediato a React Native o Expo cuando el proyecto lo requiere.
                 </p>
               </div>
 
@@ -212,13 +223,11 @@ export function ExplanationModal({ isOpen, onClose }: ExplanationModalProps) {
                   3. ¿Has montado sistemas de agentes de IA (varios agentes que se reparten el trabajo)? ¿Con qué herramientas y para qué?
                 </span>
                 <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed pt-1">
-                  Sí. He diseñado e implementado arquitecturas multi-agente tanto con <strong>Vercel AI SDK</strong> como con flujos de agentes autónomos basados en llamadas estructuradas (<code className="px-1 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800">generateObject</code> / Function Calling) con modelos de OpenAI y Google Gemini.
+                  Sí. He desarrollado sistemas multi-agente utilizando <strong>Vercel AI SDK</strong>, modelos LLM con validación estructurada (Zod / <em>Structured Outputs</em>) y orquestación visual en <strong>n8n</strong>:
                   <br /><br />
-                  <strong>Casos de uso y herramientas:</strong>
+                  1. <strong>Equipo Autónomo de Desarrollo (este proyecto):</strong> Una tríada colaborativa en bucle cerrado (closed-loop) donde el <em>Orquestador</em> analiza y desglosa requerimientos, <em>Develop</em> programa los ficheros técnicos y <em>Testing</em> ejecuta pruebas automáticas, devolviendo feedback de corrección a Develop hasta que el código queda 100% aprobado.
                   <br />
-                  1. <em>Equipo de Desarrollo Autónomo (esta misma aplicación):</em> Un Orquestador que planifica y desglosa tareas, un Desarrollador que escribe el código y un Tester que ejecuta validaciones con un bucle de reintento automático hasta que el código es 100% aprobado.
-                  <br />
-                  2. <em>Pipeline de análisis y redacción técnica:</em> Un agente investigador que sintetiza fuentes documentales, un agente redactor que genera el contenido técnico y un agente crítico/corrector que valida la exactitud y tono antes de publicar.
+                  2. <strong>Workflows Multi-Agente en n8n:</strong> Nodos y agentes especializados que ingieren contenidos de múltiples fuentes, sintetizan y adaptan el tono de redacción para cada red social con LLMs, y coordinan la publicación automatizada mediante APIs REST.
                 </p>
               </div>
 
@@ -230,15 +239,15 @@ export function ExplanationModal({ isOpen, onClose }: ExplanationModalProps) {
                 <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed pt-1">
                   Abordo la situación con <strong>asertividad, empatía y enfoque comercial constructivo</strong>, sin decir un «no» cortante ni aceptar desviaciones que pongan en riesgo el proyecto.
                   <br /><br />
-                  <strong>Estructura de la respuesta que aplico:</strong>
+                  <strong>Estructura en 3 pasos:</strong>
                   <br />
-                  1. <em>Validar la idea:</em> «Me parece una funcionalidad fantástica y entiendo perfectamente el valor que aporta a tu negocio.»
+                  1. <em>Validar positivamente la idea:</em> «Me parece una funcionalidad fantástica y entiendo perfectamente el valor que aporta a tu negocio.»
                   <br />
-                  2. <em>Alinear con el alcance acordado:</em> «Al revisar la hoja de ruta y el contrato actual, esta funcionalidad queda fuera del alcance definido para esta entrega.»
+                  2. <em>Alinear con el alcance acordado:</em> «Al revisar la planificación y el contrato actual, esta funcionalidad queda fuera del alcance definido para esta entrega.»
                   <br />
                   3. <em>Ofrecer dos alternativas viables:</em>
                   <br />
-                  - <strong>Opción A (Fase 2 / Addendum):</strong> «Podemos estimar el esfuerzo de esta nueva función y presupuestarla como una mejora o fase 2 justo al terminar la entrega actual.»
+                  - <strong>Opción A (Fase 2 / Addendum):</strong> «Podemos estimar el esfuerzo de esta nueva función y presupuestarla como una mejora o fase 2 justo al terminar la entrega actual, evitando retrasar el lanzamiento.»
                   <br />
                   - <strong>Opción B (Sustitución de alcance):</strong> «O bien, si esta nueva función es prioritaria para el lanzamiento, podemos sustituir alguna de las tareas previstas de esfuerzo similar para mantener intactos tanto el presupuesto como la fecha de entrega.»
                 </p>

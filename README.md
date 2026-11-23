@@ -98,31 +98,33 @@ Durante el ciclo de desarrollo de esta prueba se utilizaron asistentes de codifi
 
 ### 1. ¿Qué integraciones con servicios externos has hecho (pagos, CRM, WhatsApp, Google...)? Cuéntanos una que te costara y cómo la resolviste.
 > **Respuesta:**
-> He integrado pasarelas de pago (Stripe Checkout y suscripciones con facturación recurrente), autenticación y servicios en la nube con Google OAuth2 / Google Cloud APIs, mensajería transaccional mediante WhatsApp Cloud API (vía Meta Graph API) y sincronización de leads y contactos con CRMs como HubSpot.
+> He trabajado con un amplio abanico de integraciones complejas en proyectos reales de producción:
+> - **Pagos y Logística (en *EFL - Elite Fight League*):** Integración de Stripe (PaymentIntent embebido, checkout y webhooks asíncronos con firma criptográfica `stripe-signature` e idempotencia) y la API de Packlink PRO para cálculo de tarifas de envío en tiempo real y generación de borradores de etiquetas vía Vercel Crons.
+> - **Redes Sociales y OAuth (en *BotRedesSociales*):** Meta Graph API (Facebook Pages e Instagram Business Login directo con ciclo de refresco de tokens de 60 días), TikTok Content Posting API (Direct Post), YouTube Data API v3 (Google Cloud OAuth2 con `access_type=offline`), Twitter/X API (Pay-Per-Use) y workflows automatizados con n8n.
+> - **Bases de datos y mensajería:** Supabase (PostgreSQL, Auth y Storage con RLS activo) y nodemailer SMTP para comunicaciones transaccionales.
 >
-> **La integración más compleja:** La gestión robusta de **Webhooks asíncronos en Stripe**. En escenarios de concurrencia y reintentos automáticos de la red (entrega *at-least-once*), existía el riesgo de procesar dos veces el mismo evento de pago (`checkout.session.completed`), lo que podía provocar activaciones duplicadas de licencias o envíos repetidos de correos de bienvenida.
->
-> **Cómo la resolví:** Diseñé un patrón de **idempotencia estricta**: registré cada `event.id` entrante en una tabla de auditoría con restricción única bajo una transacción de base de datos antes de disparar la lógica de negocio. Si el ID ya existía, devolvía `200 OK` inmediatamente sin reejecutar. Adicionalmente, aseguré la verificación de firma criptográfica (`stripe.webhooks.constructEvent`) utilizando el buffer raw del body de Next.js para proteger contra ataques de replay.
+> **La integración que más me costó y cómo la resolví:**
+> La **API de TikTok (Content Posting API - Direct Post)**. Fue un reto mayúsculo que requirió superar **3 rechazos de auditoría** antes de conseguir la aprobación oficial para publicar en vivo:
+> 1. *Rechazo por modelo de negocio:* TikTok no aprueba apps para "uso personal/interno"; tuve que reestructurar la plataforma y la documentación técnica para certificarla como multi-cliente (los clientes conectan sus propias cuentas vía OAuth).
+> 2. *Rechazo por coherencia de marca:* Exigieron coherencia total en todos los puntos de contacto: nombre de app = título de pestaña = dominio verificado (`redes.regladoconsultores.com`) = favicon, junto con páginas públicas de Términos y Privacidad sin requerir login.
+> 3. *Rechazo por vídeo demo y Direct Post:* Exigían un vídeo demostrativo continuo sin cortes con la barra de navegación visible mostrando la publicación efectiva en TikTok. Además, la auditoría de *Direct Post* era un trámite independiente al App Review inicial, requiriendo verificación de dominio previa para `PULL_FROM_URL` en fotos y carga binaria `FILE_UPLOAD` para vídeos.
+> Resolví cada requerimiento punto por punto hasta lograr la certificación completa en producción.
 
 ---
 
 ### 2. ¿Has publicado apps en App Store o Google Play? ¿Cuáles y qué parte hiciste tú?
 > **Respuesta:**
-> Sí, he participado en el desarrollo y despliegue móvil utilizando **React Native y Expo (EAS Build / EAS Submit)**.
+> Mi trayectoria principal está enfocada en el desarrollo **Full-Stack Web (Next.js, Laravel, Supabase, PostgreSQL) y aplicaciones web progresivas (PWAs)** responsivas de alto rendimiento optimizadas para dispositivos móviles.
 >
-> **Mi rol y responsabilidades:**
-> - **Desarrollo:** Creación de componentes nativos, consumo de APIs REST/GraphQL, almacenamiento cifrado seguro (`expo-secure-store` para tokens JWT) y gestión de notificaciones push (FCM y APNs).
-> - **Publicación y Tiendas:** Configuración de certificados de distribución, provisioning profiles y App Identifiers en Apple Developer Console, así como la subida de App Bundles (`.aab`) en Google Play Console. Gestioné el cumplimiento de las políticas de privacidad, formularios de clasificación de contenido y resolví rechazos habituales de revisión (como el flujo de eliminación de cuenta de usuario exigido por Apple).
+> Aunque no he publicado apps móviles nativas individuales directamente en App Store o Google Play, domino con solvencia los estándares de seguridad, privacidad y verificación de permisos que exigen las grandes plataformas (como demuestran las auditorías aprobadas en Meta App Review y TikTok Direct Post, cuyos criterios de revisión, gestión de scopes OAuth y políticas de datos son idénticos a los de Google Play Console y App Store Connect). Además, cuento con base sólida en React y TypeScript que me permite adaptarme de inmediato a React Native o Expo cuando el proyecto lo requiere.
 
 ---
 
 ### 3. ¿Has montado sistemas de agentes de IA (varios agentes que se reparten el trabajo)? ¿Con qué herramientas y para qué?
 > **Respuesta:**
-> Sí. He diseñado sistemas multi-agente utilizando **Vercel AI SDK**, **LangChain/LangGraph** y llamadas a funciones estructuradas (*Structured Outputs / Function Calling* con Zod).
->
-> **Casos implementados:**
-> 1. **Equipo Autónomo de Desarrollo (este proyecto):** Una tríada colaborativa donde el **Orquestador** desglosa requerimientos en tareas secuenciales, el **Desarrollador** genera el código fuente y el **Tester** ejecuta validaciones en casos límite. Si Testing encuentra discrepancias, devuelve el control a Develop con instrucciones de corrección en un bucle cerrado hasta alcanzar el 100% de éxito.
-> 2. **Pipeline de Procesamiento Documental:** Un agente clasificador que categoriza facturas y contratos, un agente extractor que parsea campos clave a JSON y un agente auditor que contrasta los totales contra el ERP antes de consolidar el registro.
+> Sí. He diseñado sistemas multi-agente utilizando **Vercel AI SDK**, modelos LLM con validación estructurada (Zod / *Structured Outputs*) y orquestación visual en **n8n**:
+> 1. **Equipo Autónomo de Desarrollo (este proyecto):** Una tríada colaborativa en bucle cerrado (closed-loop) donde el *Orquestador* analiza y desglosa requerimientos, *Develop* programa los ficheros técnicos y *Testing* ejecuta pruebas automáticas, devolviendo feedback de corrección a Develop hasta que el código queda 100% aprobado.
+> 2. **Workflows Multi-Agente en n8n:** Nodos y agentes especializados que ingieren contenidos de múltiples fuentes, sintetizan y adaptan el tono de redacción para cada red social con LLMs, y coordinan la publicación automatizada mediante APIs REST.
 
 ---
 
