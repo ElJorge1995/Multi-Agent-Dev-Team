@@ -61,31 +61,40 @@ export function PromptSection({ isRunning, onRun, onReset }: PromptSectionProps)
 
       {/* Input form */}
       <form onSubmit={handleSubmit} className="space-y-3">
-        <div className="relative">
+        <div className="rounded-2xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-transparent transition-all shadow-inner p-3 flex flex-col justify-between min-h-[110px]">
           <textarea
             id="prompt-input"
             rows={2}
             value={prompt}
             disabled={isRunning}
             onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
             placeholder="Ejemplo: «añade una página de contacto a esta web con validación y notificaciones»..."
-            className="w-full px-4 py-3 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-sm disabled:opacity-60 resize-none pr-28"
+            className="w-full bg-transparent text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none transition text-sm disabled:opacity-60 resize-y min-h-[50px] leading-relaxed"
           />
-          <div className="absolute right-2.5 bottom-3.5 flex items-center gap-1.5">
+          <div className="flex items-center justify-between pt-2 border-t border-zinc-200/60 dark:border-zinc-800/60 mt-1">
+            <span className="text-[11px] text-zinc-400">
+              Pulsa <kbd className="px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800 text-[10px] font-mono">Enter ↵</kbd> para enviar
+            </span>
             <button
               type="submit"
               disabled={!prompt.trim() || isRunning}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium text-xs transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold text-xs transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isRunning ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span>En curso</span>
+                  <span>En curso...</span>
                 </>
               ) : (
                 <>
                   <Send className="w-3.5 h-3.5" />
-                  <span>Ejecutar</span>
+                  <span>Ejecutar Agentes</span>
                 </>
               )}
             </button>
