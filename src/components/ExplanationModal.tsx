@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, BookOpen, HelpCircle, Code, Shield, CheckCircle, Cpu, FileText } from "lucide-react";
+import { X, BookOpen, Code, Cpu } from "lucide-react";
 
 interface ExplanationModalProps {
   isOpen: boolean;
@@ -9,7 +9,7 @@ interface ExplanationModalProps {
 }
 
 export function ExplanationModal({ isOpen, onClose }: ExplanationModalProps) {
-  const [activeTab, setActiveTab] = useState<"architecture" | "questions" | "ai_usage">("architecture");
+  const [activeTab, setActiveTab] = useState<"architecture" | "ai_usage">("architecture");
 
   if (!isOpen) return null;
 
@@ -21,7 +21,7 @@ export function ExplanationModal({ isOpen, onClose }: ExplanationModalProps) {
           <div className="flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-indigo-500" />
             <h2 className="font-bold text-zinc-900 dark:text-zinc-100 text-base">
-              Documentación del Proyecto & Respuestas a la Prueba
+              Documentación del Proyecto & Arquitectura
             </h2>
           </div>
           <button
@@ -54,16 +54,7 @@ export function ExplanationModal({ isOpen, onClose }: ExplanationModalProps) {
           >
             <Code className="w-3.5 h-3.5" /> Uso de Claude Code / Codex
           </button>
-          <button
-            onClick={() => setActiveTab("questions")}
-            className={`px-3.5 py-2 text-xs font-semibold border-b-2 transition flex items-center gap-1.5 ${
-              activeTab === "questions"
-                ? "border-indigo-600 text-indigo-600 dark:text-indigo-400"
-                : "border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
-            }`}
-          >
-            <HelpCircle className="w-3.5 h-3.5" /> Las 4 Preguntas de la Entrevista
-          </button>
+
         </div>
 
         {/* Tab content */}
@@ -168,92 +159,7 @@ export function ExplanationModal({ isOpen, onClose }: ExplanationModalProps) {
             </div>
           )}
 
-          {activeTab === "questions" && (
-            <div className="space-y-5">
-              <div>
-                <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 mb-1">
-                  Respuestas a las 4 Preguntas de la Entrevista
-                </h3>
-                <p className="text-zinc-500 dark:text-zinc-400">
-                  Basadas en experiencia real en proyectos de producción (EFL Fight League y Plataforma Multi-Red Social):
-                </p>
-              </div>
 
-              {/* Pregunta 1 */}
-              <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/20">
-                <span className="font-bold text-zinc-900 dark:text-zinc-100 block mb-1">
-                  1. ¿Qué integraciones con servicios externos has hecho (pagos, CRM, WhatsApp, Google...)? Cuéntanos una que te costara y cómo la resolviste.
-                </span>
-                <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed pt-1">
-                  He trabajado con una amplia variedad de integraciones en proyectos reales en producción:
-                  <br />
-                  • <strong>Pagos y logística (en EFL - Elite Fight League):</strong> Integración de Stripe (PaymentIntent embebido, checkout y webhooks asíncronos con firma criptográfica e idempotencia) y la API de Packlink PRO para cálculo de envíos en tiempo real y generación de borradores de etiquetas vía Vercel Crons.
-                  <br />
-                  • <strong>Redes Sociales y OAuth (en BotRedesSociales):</strong> Meta Graph API (Facebook e Instagram Login directo con tokens de 60 días), TikTok Content Posting API, YouTube Data API v3 (Google Cloud), Twitter/X API (Pay-Per-Use) y automatizaciones conectadas con n8n.
-                  <br />
-                  • <strong>Bases de Datos y Email:</strong> Supabase (Postgres, Auth y Storage con RLS) y nodemailer SMTP para envíos transaccionales.
-                  <br /><br />
-                  <strong>La que más me costó:</strong> La <strong>API de TikTok (Content Posting API - Direct Post)</strong>. Requirió superar **3 rechazos de auditoría** antes de conseguir la aprobación para publicar en producción:
-                  <br />
-                  1. <em>Rechazo por modelo de negocio:</em> TikTok rechaza apps de uso interno/personal; tuve que reestructurar la plataforma para certificarla como multi-cliente (los clientes conectan sus propias cuentas vía OAuth).
-                  <br />
-                  2. <em>Rechazo por coherencia de marca:</em> Exigieron coherencia total (nombre de app = título de pestaña = dominio verificado = favicon) y páginas públicas de Términos y Privacidad sin requerir login.
-                  <br />
-                  3. <em>Vídeo demo y Direct Post:</em> Exigían un vídeo demostrativo continuo con la barra de navegación visible mostrando la publicación efectiva en TikTok. Además, la auditoría de <em>Direct Post</em> requería verificación de dominio previa para <code>PULL_FROM_URL</code> en fotos y carga binaria <code>FILE_UPLOAD</code> para vídeos.
-                  <br /><br />
-                  Resolví cada requerimiento punto por punto hasta lograr la certificación completa en vivo.
-                </p>
-              </div>
-
-              {/* Pregunta 2 */}
-              <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/20">
-                <span className="font-bold text-zinc-900 dark:text-zinc-100 block mb-1">
-                  2. ¿Has publicado apps en App Store o Google Play? ¿Cuáles y qué parte hiciste tú?
-                </span>
-                <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed pt-1">
-                  Mi trayectoria principal está enfocada en el desarrollo <strong>Full-Stack Web (Next.js, Laravel, Supabase, PostgreSQL) y aplicaciones web progresivas (PWAs)</strong> responsivas de alto rendimiento optimizadas para dispositivos móviles.
-                  <br /><br />
-                  Aunque no he publicado apps móviles nativas individuales directamente en App Store o Google Play, domino con solvencia los estándares de seguridad, privacidad y verificación de permisos que exigen las grandes plataformas (como demuestran las auditorías aprobadas en Meta App Review y TikTok Direct Post, cuyos criterios de revisión, gestión de scopes OAuth y políticas de datos son idénticos a los de Google Play Console y App Store Connect). Además, cuento con base en React y TypeScript que me permite adaptarme de inmediato a React Native o Expo cuando el proyecto lo requiere.
-                </p>
-              </div>
-
-              {/* Pregunta 3 */}
-              <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/20">
-                <span className="font-bold text-zinc-900 dark:text-zinc-100 block mb-1">
-                  3. ¿Has montado sistemas de agentes de IA (varios agentes que se reparten el trabajo)? ¿Con qué herramientas y para qué?
-                </span>
-                <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed pt-1">
-                  Sí. He desarrollado sistemas multi-agente utilizando <strong>Vercel AI SDK</strong>, modelos LLM con validación estructurada (Zod / <em>Structured Outputs</em>) y orquestación visual en <strong>n8n</strong>:
-                  <br /><br />
-                  1. <strong>Equipo Autónomo de Desarrollo (este proyecto):</strong> Una tríada colaborativa en bucle cerrado (closed-loop) donde el <em>Orquestador</em> analiza y desglosa requerimientos, <em>Develop</em> programa los ficheros técnicos y <em>Testing</em> ejecuta pruebas automáticas, devolviendo feedback de corrección a Develop hasta que el código queda 100% aprobado.
-                  <br />
-                  2. <strong>Workflows Multi-Agente en n8n:</strong> Nodos y agentes especializados que ingieren contenidos de múltiples fuentes, sintetizan y adaptan el tono de redacción para cada red social con LLMs, y coordinan la publicación automatizada mediante APIs REST.
-                </p>
-              </div>
-
-              {/* Pregunta 4 */}
-              <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/20">
-                <span className="font-bold text-zinc-900 dark:text-zinc-100 block mb-1">
-                  4. Un cliente te pide algo que no entra en lo contratado. ¿Cómo se lo dices?
-                </span>
-                <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed pt-1">
-                  Abordo la situación con <strong>asertividad, empatía y enfoque comercial constructivo</strong>, sin decir un «no» cortante ni aceptar desviaciones que pongan en riesgo el proyecto.
-                  <br /><br />
-                  <strong>Estructura en 3 pasos:</strong>
-                  <br />
-                  1. <em>Validar positivamente la idea:</em> «Me parece una funcionalidad fantástica y entiendo perfectamente el valor que aporta a tu negocio.»
-                  <br />
-                  2. <em>Alinear con el alcance acordado:</em> «Al revisar la planificación y el contrato actual, esta funcionalidad queda fuera del alcance definido para esta entrega.»
-                  <br />
-                  3. <em>Ofrecer dos alternativas viables:</em>
-                  <br />
-                  - <strong>Opción A (Fase 2 / Addendum):</strong> «Podemos estimar el esfuerzo de esta nueva función y presupuestarla como una mejora o fase 2 justo al terminar la entrega actual, evitando retrasar el lanzamiento.»
-                  <br />
-                  - <strong>Opción B (Sustitución de alcance):</strong> «O bien, si esta nueva función es prioritaria para el lanzamiento, podemos sustituir alguna de las tareas previstas de esfuerzo similar para mantener intactos tanto el presupuesto como la fecha de entrega.»
-                </p>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Footer */}
